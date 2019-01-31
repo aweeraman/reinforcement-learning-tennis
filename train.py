@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from ddpg_agent import Agent
 from collections import deque
 
-env = UnityEnvironment(file_name='Reacher.app')
+env = UnityEnvironment(file_name='Tennis.app')
 
 # get the default brain
 brain_name = env.brain_names[0]
@@ -29,7 +29,8 @@ state_size = states.shape[1]
 print('There are {} agents. Each observes a state with length: {}'.format(states.shape[0], state_size))
 print('The state for the first agent looks like:', states[0])
 
-agent = Agent(state_size=state_size, action_size=action_size, random_seed=1)
+agent[0] = Agent(state_size=state_size, action_size=action_size, random_seed=1)
+agent[1] = Agent(state_size=state_size, action_size=action_size, random_seed=1)
 
 def ddpg(n_episodes=2000, max_t=20000):
 
@@ -43,7 +44,7 @@ def ddpg(n_episodes=2000, max_t=20000):
         scores = np.zeros(num_agents)                          # initialize the score (for each agent)
 
         while True:
-            action = agent.act(states)
+            action = agent.act(states, add_noise=True)
             env_info = env.step(action)[brain_name]
             next_states = env_info.vector_observations         # get next state (for each agent)
             rewards = env_info.rewards                         # get reward (for each agent)
@@ -54,16 +55,16 @@ def ddpg(n_episodes=2000, max_t=20000):
             if np.any(dones):                                  # exit loop if episode finished
                 break
 
-        scores_deque.append(np.mean(scores))
-        total_scores.append(np.mean(scores))
+        scores_deque.append(np.max(scores))
+        total_scores.append(np.max(scores))
 
-        print('\rEpisode: \t{} \tScore: \t{:.2f} \tAverage Score: \t{:.2f}'.format(i_episode, np.mean(scores), np.mean(scores_deque)), end="")
+        print('\rEpisode: \t{} \tScore: \t{:.2f} \tAverage Score: \t{:.2f}'.format(i_episode, np.max(scores), np.mean(scores_deque)), end="")
 
         if i_episode % 100 == 0:
             torch.save(agent.actor_local.state_dict(), 'checkpoint_actor.pth')
             torch.save(agent.critic_local.state_dict(), 'checkpoint_critic.pth')
 
-        if np.mean(scores_deque)>=30.0:  # consider done when the average score reaches 30 or more
+        if np.mean(scores_deque)>=0.5:  # consider done when the average score reaches 30 or more
             print('\nEnvironment solved in {:d} episodes!\tAverage Score: {:.2f}'.format(i_episode-100, np.mean(scores_deque)))
             torch.save(agent.actor_local.state_dict(), 'checkpoint_actor.pth')
             torch.save(agent.critic_local.state_dict(), 'checkpoint_critic.pth')
