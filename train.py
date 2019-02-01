@@ -3,7 +3,7 @@ import numpy as np
 import random
 import torch
 import matplotlib.pyplot as plt
-from ddpg_agent import Agent
+from ddpg_agent import Agent, ReplayBuffer
 from collections import deque
 
 env = UnityEnvironment(file_name='Tennis.app')
@@ -29,8 +29,15 @@ state_size = states.shape[1]
 print('There are {} agents. Each observes a state with length: {}'.format(states.shape[0], state_size))
 print('The state for the first agent looks like:', states[0])
 
-agent[0] = Agent(state_size=state_size, action_size=action_size, random_seed=1)
-agent[1] = Agent(state_size=state_size, action_size=action_size, random_seed=1)
+state_size = state_size * 2
+agent_1 = Agent(state_size=state_size, action_size=action_size, random_seed=1)
+agent_2 = Agent(state_size=state_size, action_size=action_size, random_seed=1)
+
+actor_1_weights = "actor_1_model.pth"
+actor_2_weights = "actor_2_model.pth"
+
+critic_1_weights = "critic_1_model.pth"
+critic_2_weights = "critic_2_model.pth"
 
 def ddpg(n_episodes=2000, max_t=20000):
 
@@ -40,34 +47,44 @@ def ddpg(n_episodes=2000, max_t=20000):
     for i_episode in range(1, n_episodes+1):
         env_info = env.reset(train_mode=True)[brain_name]      # reset the environment
         states = env_info.vector_observations                  # get the current state (for each agent)
-        agent.reset()
+        states = np.reshape(states, (1, state_size))
+        agent_1.reset()
+        agent_2.reset()
         scores = np.zeros(num_agents)                          # initialize the score (for each agent)
 
         while True:
-            action = agent.act(states, add_noise=True)
-            env_info = env.step(action)[brain_name]
+            action_1 = agent_1.act(states, add_noise=True)
+            action_2 = agent_2.act(states, add_noise=True)
+            actions = np.concatenate((action_1, action_2), axis=0)
+            actions = np.reshape(actions, (1, 4))
+
+            env_info = env.step(actions)[brain_name]
             next_states = env_info.vector_observations         # get next state (for each agent)
+            next_states = np.reshape(next_states, (1, state_size))
             rewards = env_info.rewards                         # get reward (for each agent)
             dones = env_info.local_done                        # see if episode finished
-            agent.step(states, action, rewards, next_states, dones)
+
+            agent_1.step(states, action_1, rewards[0], next_states, dones[0])
+            agent_2.step(states, action_2, rewards[1], next_states, dones[1])
+
             scores += rewards                                  # update the score (for each agent)
             states = next_states                               # roll over states to next time step
+
             if np.any(dones):                                  # exit loop if episode finished
                 break
 
         scores_deque.append(np.max(scores))
         total_scores.append(np.max(scores))
 
+        torch.save(agent_1.actor_local.state_dict(), actor_1_weights)
+        torch.save(agent_2.actor_local.state_dict(), actor_2_weights)
+        torch.save(agent_1.critic_local.state_dict(), critic_1_weights)
+        torch.save(agent_2.critic_local.state_dict(), critic_2_weights)
+        
         print('\rEpisode: \t{} \tScore: \t{:.2f} \tAverage Score: \t{:.2f}'.format(i_episode, np.max(scores), np.mean(scores_deque)), end="")
 
-        if i_episode % 100 == 0:
-            torch.save(agent.actor_local.state_dict(), 'checkpoint_actor.pth')
-            torch.save(agent.critic_local.state_dict(), 'checkpoint_critic.pth')
-
-        if np.mean(scores_deque)>=0.5:  # consider done when the average score reaches 30 or more
+        if np.mean(scores_deque)>=0.5:  # consider done when the average score reaches 0.5 or more
             print('\nEnvironment solved in {:d} episodes!\tAverage Score: {:.2f}'.format(i_episode-100, np.mean(scores_deque)))
-            torch.save(agent.actor_local.state_dict(), 'checkpoint_actor.pth')
-            torch.save(agent.critic_local.state_dict(), 'checkpoint_critic.pth')
             break
 
     plt.plot(np.arange(1, len(total_scores)+1), total_scores)
