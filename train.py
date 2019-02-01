@@ -39,10 +39,11 @@ actor_2_weights = "actor_2_model.pth"
 critic_1_weights = "critic_1_model.pth"
 critic_2_weights = "critic_2_model.pth"
 
-def ddpg(n_episodes=2000, max_t=20000):
+def ddpg(n_episodes=100000, max_t=20000):
 
     scores_deque = deque(maxlen=100)
     total_scores = []
+    average_scores = []
 
     for i_episode in range(1, n_episodes+1):
         env_info = env.reset(train_mode=True)[brain_name]      # reset the environment
@@ -75,6 +76,7 @@ def ddpg(n_episodes=2000, max_t=20000):
 
         scores_deque.append(np.max(scores))
         total_scores.append(np.max(scores))
+        average_scores.append(np.mean(scores_deque))
 
         torch.save(agent_1.actor_local.state_dict(), actor_1_weights)
         torch.save(agent_2.actor_local.state_dict(), actor_2_weights)
@@ -87,8 +89,8 @@ def ddpg(n_episodes=2000, max_t=20000):
             print('\nEnvironment solved in {:d} episodes!\tAverage Score: {:.2f}'.format(i_episode-100, np.mean(scores_deque)))
             break
 
-    plt.plot(np.arange(1, len(total_scores)+1), total_scores)
-    plt.ylabel('Score')
+    plt.plot(np.arange(1, len(average_scores)+1), average_scores)
+    plt.ylabel('Avg Score')
     plt.xlabel('Episode #')
     plt.show()
 
