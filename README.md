@@ -35,6 +35,33 @@ To train the agent, execute the following:
 
 ```
 $ python train.py --run
+Mono path[0] = '/Users/anuradha/ninsei/udacity/reinforcement-learning-tennis/Tennis.app/Contents/Resources/Data/Managed'
+Mono config path = '/Users/anuradha/ninsei/udacity/reinforcement-learning-tennis/Tennis.app/Contents/MonoBleedingEdge/etc'
+INFO:unityagents:
+'Academy' started successfully!
+Unity Academy name: Academy
+        Number of Brains: 1
+        Number of External Brains : 1
+        Lesson number : 0
+        Reset Parameters :
+
+Unity brain name: TennisBrain
+        Number of Visual Observations (per agent): 0
+        Vector Observation space type: continuous
+        Vector Observation space size (per agent): 8
+        Number of stacked Vector Observation: 3
+        Vector Action space type: continuous
+        Vector Action space size (per agent): 2
+        Vector Action descriptions: ,
+Number of agents: 2
+Size of each action: 2
+There are 2 agents. Each observes a state with length: 24
+The state for the first agent looks like: [ 0.          0.          0.          0.          0.          0.
+  0.          0.          0.          0.          0.          0.
+  0.          0.          0.          0.         -6.65278625 -1.5
+ -0.          0.          6.83172083  6.         -0.          0.        ]
+Episode: 	2414 	Score: 	1.50 	Average Score: 	0.50
+Environment solved in 2314 episodes!	Average Score: 0.50
 ```
 
 ![Plot of rewards](https://raw.githubusercontent.com/aweeraman/reinforcement-learning-tennis/master/graph.png)
