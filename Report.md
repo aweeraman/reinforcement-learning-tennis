@@ -75,5 +75,5 @@ Below is a training run of the above model archicture and hyperparameters:
 
 ## Reference
 
-1 - https://spinningup.openai.com/en/latest/algorithms/ddpg.html
-2 - https://blog.openai.com/learning-to-cooperate-compete-and-communicate/
+1. https://spinningup.openai.com/en/latest/algorithms/ddpg.html
+2. https://blog.openai.com/learning-to-cooperate-compete-and-communicate/
