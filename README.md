@@ -74,7 +74,7 @@ Episode: 	2414 	Score: 	1.50 	Average Score: 	0.50
 Environment solved in 2314 episodes!	Average Score: 0.50
 ```
 
-![Plot of rewards](https://raw.githubusercontent.com/aweeraman/reinforcement-learning-tennis/master/graph.png)
+![Plot of rewards](https://raw.githubusercontent.com/aweeraman/reinforcement-learning-tennis/master/images/plot_of_rewards.png)
 
 ## 5. Run the trained agent
 
@@ -84,7 +84,7 @@ To run the trained agent:
 $ python tennis.py
 ```
 
-![Running agent](https://raw.githubusercontent.com/aweeraman/reinforcement-learning-tennis/master/running_agent.png)
+![Running agent](https://raw.githubusercontent.com/aweeraman/reinforcement-learning-tennis/master/images/running_agent.png)
 
 ---
 
