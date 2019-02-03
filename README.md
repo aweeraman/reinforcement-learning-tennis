@@ -111,7 +111,7 @@ Below is a training run of the above model archicture and hyperparameters:
 * Size of each action: 2
 * Environment solved in 2314 episodes!	Average Score: 0.50
 
-![Plot of rewards](https://raw.githubusercontent.com/aweeraman/reinforcement-learning-tennis/master/graph.png)
+![Plot of rewards](https://raw.githubusercontent.com/aweeraman/reinforcement-learning-tennis/master/images/plot_of_rewards.png)
 
 ## Future work
 
