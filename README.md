@@ -86,6 +86,8 @@ $ python tennis.py
 
 ![Running agent](https://raw.githubusercontent.com/aweeraman/reinforcement-learning-tennis/master/running_agent.png)
 
+---
+
 ## Learning algorithm
 
 For this project, the Multi-Agent Deep Deterministic Policy Gradient (DDPG) algorithm was used to train the agent.
