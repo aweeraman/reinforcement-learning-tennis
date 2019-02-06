@@ -5,6 +5,8 @@ hits the ball over the net, it receives a reward of +0.1. If an agent lets a bal
 ground or hits the ball out of bounds, it receives a reward of -0.01. Thus, the goal of
 each agent is to keep the ball in play.
 
+![Running agent](https://raw.githubusercontent.com/aweeraman/reinforcement-learning-tennis/master/images/running_agent.png)
+
 The observation space consists of 8 variables corresponding to the position and velocity
 of the ball and racket. Each agent receives its own, local observation. Two continuous
 actions are available, corresponding to movement toward (or away from) the net, and jumping.
@@ -54,8 +56,6 @@ To run the trained agent:
 ```
 $ python tennis.py
 ```
-
-![Running agent](https://raw.githubusercontent.com/aweeraman/reinforcement-learning-tennis/master/images/running_agent.png)
 
 ---
 
