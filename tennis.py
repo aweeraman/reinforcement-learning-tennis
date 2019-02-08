@@ -2,9 +2,7 @@ from unityagents import UnityEnvironment
 import numpy as np
 import random
 import torch
-import matplotlib.pyplot as plt
-from ddpg_agent import Agent, ReplayBuffer
-from collections import deque
+from ddpg_agent import Agent
 
 env = UnityEnvironment(file_name='Tennis.app')
 
@@ -39,10 +37,6 @@ agent_1.critic_local.load_state_dict(torch.load('critic_1_model.pth'))
 agent_2.actor_local.load_state_dict(torch.load('actor_2_model.pth'))
 agent_2.critic_local.load_state_dict(torch.load('critic_2_model.pth'))
 
-scores_deque = deque(maxlen=100)
-total_scores = []
-average_scores = []
-
 for i_episode in range(1, 10):
     env_info = env.reset(train_mode=False)[brain_name]     # reset the environment
     states = env_info.vector_observations                  # get the current state (for each agent)
@@ -59,7 +53,6 @@ for i_episode in range(1, 10):
         env_info = env.step(actions)[brain_name]
         next_states = env_info.vector_observations         # get next state (for each agent)
         next_states = np.reshape(next_states, (1, state_size))
-        rewards = env_info.rewards                         # get reward (for each agent)
         dones = env_info.local_done                        # see if episode finished
 
         states = next_states                               # roll over states to next time step
